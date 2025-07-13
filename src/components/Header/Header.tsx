@@ -22,6 +22,12 @@ export class Header extends Component<Props, { inputValue: string }> {
     this.props.onSearch(this.state.inputValue.trim());
   };
 
+  handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      this.handleSearchClick();
+    }
+  };
+
   render() {
     return (
       <header className="p-6 border rounded-lg space-y-4 bg-white">
@@ -31,6 +37,7 @@ export class Header extends Component<Props, { inputValue: string }> {
             type="text"
             value={this.state.inputValue}
             onChange={this.handleInputChange}
+            onKeyDown={this.handleKeyDown}
             placeholder="Search Input Field"
             className="flex-1 text-black border rounded px-3 py-2"
           />

@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import Card from '../Card/Card.tsx';
-import type { IPokemon } from '../../src/utils/types.ts';
-import { getPokemonId } from '../../src/utils/getPokemonId.ts';
+import type { IPokemon } from '../../utils/types.ts';
+import { getPokemonId } from '../../utils/getPokemonId.ts';
 
 export default class CardList extends Component<{ data: IPokemon[] }> {
   render() {

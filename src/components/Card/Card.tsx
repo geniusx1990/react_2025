@@ -1,6 +1,6 @@
 import { Component } from 'react';
-import type { IPokemon } from '../../src/utils/types.ts';
-import { getPokemonId } from '../../src/utils/getPokemonId.ts';
+import type { IPokemon } from '../../utils/types.ts';
+import { getPokemonId } from '../../utils/getPokemonId.ts';
 export default class Card extends Component<{ poke: IPokemon }> {
   render() {
     const { name, url } = this.props.poke;

@@ -1,8 +1,8 @@
 import { Component } from 'react';
 import { Header } from '../../components/Header/Header.tsx';
 import { Main } from '../../components/Main/Main.tsx';
-import type { IPokemon } from '../../src/utils/types.ts';
-import { fetchAllPokemon } from '../../src/utils/api.ts';
+import type { IPokemon } from '../../utils/types.ts';
+import { fetchAllPokemon } from '../../utils/api.ts';
 
 interface State {
   search: string;
