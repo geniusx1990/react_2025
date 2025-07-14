@@ -42,4 +42,12 @@ export default tseslint.config(
         },
       },
     },
+    {
+        files: ["**/*.{Toto,spec}.{ts,tsx,js,jsx}"],
+        languageOptions: {
+            globals: {
+                ...globals.jest,
+            },
+        },
+    }
 );

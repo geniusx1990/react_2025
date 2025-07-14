@@ -18,7 +18,7 @@ export class TestErrorButton extends Component<object, State> {
 
   render() {
     if (this.state.hasError) {
-      throw new Error('This is a test error!');
+      throw new Error('This is a Toto error!');
     }
 
     return (
