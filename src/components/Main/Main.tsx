@@ -2,8 +2,8 @@ import type { IPokemon } from '../../utils/types.ts';
 import { Component } from 'react';
 import CardList from '../CardList/CardList.tsx';
 import Skeleton from '../Skeleton/Skeleton.tsx';
-import { TestErrorButton } from '../ErrorButton/ErrorButton.tsx';
 import Loader from '../Loader/Loader.tsx';
+import { ErrorButton } from '../ErrorButton/ErrorButton.tsx';
 
 interface Props {
   data: IPokemon[];
@@ -58,7 +58,7 @@ export class Main extends Component<Props> {
         )}
 
         <div className="flex justify-end mt-4">
-          <TestErrorButton />
+          <ErrorButton />
         </div>
       </main>
     );

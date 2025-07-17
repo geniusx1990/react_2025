@@ -4,7 +4,7 @@ interface State {
   hasError: boolean;
 }
 
-export class TestErrorButton extends Component<object, State> {
+export class ErrorButton extends Component<object, State> {
   constructor(props: object) {
     super(props);
     this.state = {
