@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { Header } from './Header';
+import Header from './Header';
 
 describe('Header component', () => {
   const mockOnSearch = jest.fn();

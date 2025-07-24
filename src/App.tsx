@@ -1,8 +1,16 @@
 import './App.css';
-import { HomePage } from './pages/HomePage/HomePage.tsx';
+import { Outlet } from 'react-router';
+import Navitation from './components/Navigation/Navitation.tsx';
 
 function App() {
-  return <HomePage />;
+  return (
+    <>
+      <Navitation />
+      <main>
+        <Outlet />
+      </main>
+    </>
+  );
 }
 
 export default App;

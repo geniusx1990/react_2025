@@ -1,8 +1,9 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { Main } from './Main.tsx';
+import Main from './Main.tsx';
 import type { IPokemon } from '../../utils/types';
 import { ErrorBoundary } from '../ErrorBoundary/ErrorBoundary.tsx';
 import { FallbackUi } from '../FallbackUI/FallbackUi.tsx';
+import { MemoryRouter } from 'react-router';
 
 describe('Main component', () => {
   const mockData: IPokemon[] = [
@@ -10,7 +11,11 @@ describe('Main component', () => {
   ];
 
   test('renders cards when data is provided', () => {
-    render(<Main data={mockData} isLoading={false} error={null} />);
+    render(
+      <MemoryRouter>
+        <Main data={mockData} isLoading={false} error={null} />
+      </MemoryRouter>
+    );
     expect(screen.getByText(/squirtle/i)).toBeInTheDocument();
   });
 
@@ -28,21 +33,6 @@ describe('Main component', () => {
   test('shows error message', () => {
     render(<Main data={[]} isLoading={false} error="Failed to fetch" />);
     expect(screen.getByText(/failed to fetch/i)).toBeInTheDocument();
-  });
-
-  test('renders load more button if hasNext is true', () => {
-    render(
-      <Main
-        data={mockData}
-        isLoading={false}
-        error={null}
-        hasNext={true}
-        onLoadMore={jest.fn()}
-      />
-    );
-    expect(
-      screen.getByRole('button', { name: /load more/i })
-    ).toBeInTheDocument();
   });
 });
 

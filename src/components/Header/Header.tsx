@@ -1,54 +1,46 @@
-import { Component } from 'react';
-import * as React from 'react';
+import React, { useState } from 'react';
 
 interface Props {
   searchTerm: string;
   onSearch: (value: string) => void;
 }
 
-export class Header extends Component<Props, { inputValue: string }> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      inputValue: props.searchTerm,
-    };
-  }
+export default function Header({ searchTerm, onSearch }: Props) {
+  const [inputValue, setInputValue] = useState(searchTerm);
 
-  handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ inputValue: e.target.value });
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
   };
 
-  handleSearchClick = () => {
-    this.props.onSearch(this.state.inputValue.trim());
+  const handleSearchClick = () => {
+    onSearch(inputValue.trim());
   };
 
-  handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      this.handleSearchClick();
+      handleSearchClick();
     }
   };
 
-  render() {
-    return (
-      <header className="p-6 border rounded-lg space-y-4 bg-white">
-        <h2 className="text-lg font-semibold">Top controls</h2>
-        <div className="flex gap-4">
-          <input
-            type="text"
-            value={this.state.inputValue}
-            onChange={this.handleInputChange}
-            onKeyDown={this.handleKeyDown}
-            placeholder="Search Input Field"
-            className="flex-1 text-black border rounded px-3 py-2"
-          />
-          <button
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-            onClick={this.handleSearchClick}
-          >
-            Search
-          </button>
-        </div>
-      </header>
-    );
-  }
+  return (
+    <header className="p-6 border rounded-lg space-y-4 bg-white">
+      <h2 className="text-lg font-semibold">Top controls</h2>
+      <div className="flex gap-4">
+        <input
+          type="text"
+          value={inputValue}
+          onChange={handleInputChange}
+          onKeyDown={handleKeyDown}
+          placeholder="Search Input Field"
+          className="flex-1 text-black border rounded px-3 py-2"
+        />
+        <button
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          onClick={handleSearchClick}
+        >
+          Search
+        </button>
+      </div>
+    </header>
+  );
 }

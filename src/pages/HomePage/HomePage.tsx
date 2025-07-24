@@ -1,97 +1,98 @@
-import { Component } from 'react';
-import { Header } from '../../components/Header/Header.tsx';
-import { Main } from '../../components/Main/Main.tsx';
+import Header from '../../components/Header/Header.tsx';
+import Main from '../../components/Main/Main.tsx';
+import { fetchAllPokemon, fetchPokemonPage } from '../../utils/api.ts';
 import type { IPokemon } from '../../utils/types.ts';
-import { fetchAllPokemon } from '../../utils/api.ts';
+import { useEffect, useState } from 'react';
+import { Outlet, useSearchParams } from 'react-router';
+import { useLocalStorage } from '../../Hooks/useLocalStorage.ts';
+import Pagination from '../../components/Pagination/Pagination.tsx';
 
-interface State {
-  search: string;
-  allPokemon: IPokemon[];
-  filteredData: IPokemon[];
-  visibleCount: number;
-  isLoading: boolean;
-  error: string | null;
-}
+export default function HomePage() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [storedSearch, setStoredSearch] = useLocalStorage('searchTerm', '');
 
-export class HomePage extends Component<object, State> {
-  constructor(props: object) {
-    super(props);
-    const saved = localStorage.getItem('searchTerm') || '';
-    this.state = {
-      search: saved,
-      allPokemon: [],
-      filteredData: [],
-      visibleCount: 8,
-      isLoading: true,
-      error: null,
+  const [pokemonList, setPokemonList] = useState<IPokemon[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const limit = 8;
+  const page = parseInt(searchParams.get('page') || '1', 10);
+  const offset = (page - 1) * limit;
+
+  const search = searchParams.get('search') ?? storedSearch;
+
+  const totalPages = search ? 1 : Math.ceil(1302 / limit);
+
+  const handleSearch = (term: string) => {
+    setStoredSearch(term);
+    searchParams.set('search', term);
+    searchParams.set('page', '1');
+    setSearchParams(searchParams);
+  };
+
+  const handleLoadPage = (nextPage: number) => {
+    searchParams.set('page', nextPage.toString());
+    setSearchParams(searchParams);
+  };
+
+  useEffect(() => {
+    setIsLoading(true);
+
+    const fetchData = async () => {
+      try {
+        const data = search
+          ? await fetchAllPokemon()
+          : await fetchPokemonPage(limit, offset);
+
+        const filteredData = search
+          ? data.filter((p) =>
+              p.name.toLowerCase().includes(search.toLowerCase())
+            )
+          : data;
+
+        setPokemonList(filteredData);
+        setIsLoading(false);
+        setError(null);
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError('Internal Server Error');
+        }
+        setIsLoading(false);
+      }
     };
-  }
 
-  componentDidMount() {
-    this.loadAllPokemon();
-  }
+    fetchData();
+  }, [offset, search]);
 
-  loadAllPokemon = () => {
-    this.setState({ isLoading: true });
+  return (
+    <div className="max-w-6xl mx-auto p-6 space-y-6">
+      <Header searchTerm={search} onSearch={handleSearch} />
 
-    fetchAllPokemon()
-      .then((all) => {
-        const filtered = this.filterData(this.state.search, all);
-        this.setState({
-          allPokemon: all,
-          filteredData: filtered,
-          isLoading: false,
-          error: null,
-        });
-      })
-      .catch((err) => {
-        this.setState({
-          isLoading: false,
-          error: err.message || 'Unknown error occurred',
-        });
-      });
-  };
+      <div className="relative">
+        <Main data={pokemonList} isLoading={isLoading} error={error} />
 
-  filterData = (term: string, data: IPokemon[]): IPokemon[] => {
-    const cleaned = term.trim().toLowerCase();
-    if (!cleaned) return data;
-    return data.filter((pokemon) =>
-      pokemon.name.toLowerCase().includes(cleaned)
-    );
-  };
-
-  handleSearch = (term: string) => {
-    localStorage.setItem('searchTerm', term);
-    const filtered = this.filterData(term, this.state.allPokemon);
-    this.setState({
-      search: term,
-      filteredData: filtered,
-      visibleCount: 8,
-    });
-  };
-
-  handleLoadMore = () => {
-    this.setState((prev) => ({
-      visibleCount: prev.visibleCount + 8,
-    }));
-  };
-
-  render() {
-    const { filteredData, visibleCount } = this.state;
-    const visibleData = filteredData.slice(0, visibleCount);
-    const hasMore = visibleData.length < filteredData.length;
-
-    return (
-      <div className="max-w-4xl mx-auto p-6 space-y-6">
-        <Header searchTerm={this.state.search} onSearch={this.handleSearch} />
-        <Main
-          data={visibleData}
-          isLoading={this.state.isLoading}
-          error={this.state.error}
-          hasNext={hasMore}
-          onLoadMore={this.handleLoadMore}
-        />
+        {searchParams.get('details') && (
+          <div
+            className={`
+      absolute top-0 right-0 h-full w-full md:w-[380px] z-10
+      bg-white border-l shadow-lg transition-transform duration-300 ease-in-out
+      translate-x-0
+    `}
+          >
+            <Outlet />
+          </div>
+        )}
       </div>
-    );
-  }
+
+      {!search && !isLoading && !error && (
+        <Pagination
+          currentPage={page}
+          totalPages={totalPages}
+          onPageChange={handleLoadPage}
+        />
+      )}
+    </div>
+  );
 }

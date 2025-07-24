@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import Card from './Card.tsx';
 import type { IPokemon } from '../../utils/types';
+import { MemoryRouter } from 'react-router';
 
 describe('Card component', () => {
   const mockPokemon: IPokemon = {
@@ -9,7 +10,11 @@ describe('Card component', () => {
   };
 
   test('renders pokemon name and image', () => {
-    render(<Card poke={mockPokemon} />);
+    render(
+      <MemoryRouter>
+        <Card poke={mockPokemon} />
+      </MemoryRouter>
+    );
 
     const nameElement = screen.getByText(/pikachu/i);
     const imgElement = screen.getByRole('img', { name: /pikachu/i });
@@ -24,7 +29,11 @@ describe('Card component', () => {
 
   test('handles missing props gracefully', () => {
     const brokenData = { name: 'unknown', url: '' } as IPokemon;
-    render(<Card poke={brokenData} />);
+    render(
+      <MemoryRouter>
+        <Card poke={brokenData} />
+      </MemoryRouter>
+    );
     expect(screen.getByText(/unknown/i)).toBeInTheDocument();
     const img = screen.getByRole('img');
     expect(img).toHaveAttribute(
@@ -38,7 +47,11 @@ describe('Card component', () => {
       name: undefined,
       url: 'https://pokeapi.co/api/v2/pokemon/25/',
     } as unknown as IPokemon;
-    render(<Card poke={brokenData} />);
+    render(
+      <MemoryRouter>
+        <Card poke={brokenData} />
+      </MemoryRouter>
+    );
     const img = screen.getByRole('img');
     expect(img).toBeInTheDocument();
   });
