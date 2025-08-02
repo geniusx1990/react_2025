@@ -2,18 +2,15 @@ import Header from '../../components/Header/Header.tsx';
 import Main from '../../components/Main/Main.tsx';
 import { fetchAllPokemon, fetchPokemonPage } from '../../utils/api.ts';
 import type { IPokemon } from '../../utils/types.ts';
-import { useEffect, useState } from 'react';
+import { useCallback } from 'react';
 import { Outlet, useSearchParams } from 'react-router';
 import { useLocalStorage } from '../../Hooks/useLocalStorage.ts';
 import Pagination from '../../components/Pagination/Pagination.tsx';
+import { useFetchData } from '../../Hooks/useFetchData.ts';
 
 export default function HomePage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [storedSearch, setStoredSearch] = useLocalStorage('searchTerm', '');
-
-  const [pokemonList, setPokemonList] = useState<IPokemon[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   const limit = 8;
   const page = parseInt(searchParams.get('page') || '1', 10);
@@ -23,55 +20,50 @@ export default function HomePage() {
 
   const totalPages = search ? 1 : Math.ceil(1302 / limit);
 
+  const fetcher = useCallback(() => {
+    return search
+      ? fetchAllPokemon().then((data) =>
+          data.filter((p) =>
+            p.name.toLowerCase().includes(search.toLowerCase())
+          )
+        )
+      : fetchPokemonPage(limit, offset);
+  }, [search, limit, offset]);
+
+  const {
+    data: pokemonList,
+    isLoading,
+    error,
+  } = useFetchData<IPokemon[]>(fetcher);
+
   const handleSearch = (term: string) => {
     setStoredSearch(term);
-    searchParams.set('search', term);
-    searchParams.set('page', '1');
-    setSearchParams(searchParams);
+    setSearchParams((current) => {
+      const params = new URLSearchParams(current);
+      if (term) {
+        params.set('search', term);
+      } else {
+        params.delete('search');
+      }
+      params.set('page', '1');
+      return params;
+    });
   };
 
   const handleLoadPage = (nextPage: number) => {
-    searchParams.set('page', nextPage.toString());
-    setSearchParams(searchParams);
+    setSearchParams((current) => {
+      const params = new URLSearchParams(current);
+      params.set('page', nextPage.toString());
+      return params;
+    });
   };
-
-  useEffect(() => {
-    setIsLoading(true);
-
-    const fetchData = async () => {
-      try {
-        const data = search
-          ? await fetchAllPokemon()
-          : await fetchPokemonPage(limit, offset);
-
-        const filteredData = search
-          ? data.filter((p) =>
-              p.name.toLowerCase().includes(search.toLowerCase())
-            )
-          : data;
-
-        setPokemonList(filteredData);
-        setIsLoading(false);
-        setError(null);
-      } catch (err: unknown) {
-        if (err instanceof Error) {
-          setError(err.message);
-        } else {
-          setError('Internal Server Error');
-        }
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [offset, search]);
 
   return (
     <div className="max-w-6xl mx-auto p-6 space-y-6">
       <Header searchTerm={search} onSearch={handleSearch} />
 
       <div className="relative">
-        <Main data={pokemonList} isLoading={isLoading} error={error} />
+        <Main data={pokemonList ?? []} isLoading={isLoading} error={error} />
 
         {searchParams.get('details') && (
           <div

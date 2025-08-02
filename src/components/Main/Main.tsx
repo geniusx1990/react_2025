@@ -2,7 +2,7 @@ import type { IPokemon } from '../../utils/types.ts';
 import CardList from '../CardList/CardList.tsx';
 import Skeleton from '../Skeleton/Skeleton.tsx';
 import Loader from '../Loader/Loader.tsx';
-import { ErrorButton } from '../ErrorButton/ErrorButton.tsx';
+import ErrorButton from '../ErrorButton/ErrorButton.tsx';
 
 interface Props {
   data: IPokemon[];

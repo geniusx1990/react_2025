@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { ChangeEvent, KeyboardEvent, useState } from 'react';
 
 interface Props {
   searchTerm: string;
@@ -8,7 +8,7 @@ interface Props {
 export default function Header({ searchTerm, onSearch }: Props) {
   const [inputValue, setInputValue] = useState(searchTerm);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
   };
 
@@ -16,7 +16,7 @@ export default function Header({ searchTerm, onSearch }: Props) {
     onSearch(inputValue.trim());
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       handleSearchClick();
     }
@@ -27,7 +27,7 @@ export default function Header({ searchTerm, onSearch }: Props) {
       <h2 className="text-lg font-semibold">Top controls</h2>
       <div className="flex gap-4">
         <input
-          type="text"
+          type="search"
           value={inputValue}
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}

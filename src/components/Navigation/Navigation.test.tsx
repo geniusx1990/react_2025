@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
-import Navigation from './Navitation.tsx';
+import Navigation from './Navigation.tsx';
 
 describe('Navigation component', () => {
   test('renders Home and About links', () => {

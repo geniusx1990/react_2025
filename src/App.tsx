@@ -1,11 +1,11 @@
 import './App.css';
 import { Outlet } from 'react-router';
-import Navitation from './components/Navigation/Navitation.tsx';
+import Navigation from './components/Navigation/Navigation.tsx';
 
 function App() {
   return (
     <>
-      <Navitation />
+      <Navigation />
       <main>
         <Outlet />
       </main>

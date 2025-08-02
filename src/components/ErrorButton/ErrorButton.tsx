@@ -1,33 +1,18 @@
-import { Component } from 'react';
+import { useState } from 'react';
 
-interface State {
-  hasError: boolean;
-}
+export default function ErrorButton() {
+  const [hasError, setHasError] = useState(false);
 
-export class ErrorButton extends Component<object, State> {
-  constructor(props: object) {
-    super(props);
-    this.state = {
-      hasError: false,
-    };
+  if (hasError) {
+    throw new Error('This is a Toto error!');
   }
 
-  handleClick = () => {
-    this.setState({ hasError: true });
-  };
-
-  render() {
-    if (this.state.hasError) {
-      throw new Error('This is a Toto error!');
-    }
-
-    return (
-      <button
-        onClick={this.handleClick}
-        className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-      >
-        Throw Error
-      </button>
-    );
-  }
+  return (
+    <button
+      onClick={() => setHasError(true)}
+      className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+    >
+      Throw Error
+    </button>
+  );
 }

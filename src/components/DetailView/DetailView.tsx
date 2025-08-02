@@ -1,30 +1,20 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useSearchParams } from 'react-router';
 import Loader from '../Loader/Loader.tsx';
 import { PokemonDetails } from '../../utils/types.ts';
+import { useFetchData } from '../../Hooks/useFetchData.ts';
+import { fetchPokemonDetails } from '../../utils/api.ts';
 
 export default function DetailView() {
-  const [data, setData] = useState<PokemonDetails | null>(null);
-  const [loading, setLoading] = useState(true);
-
   const [searchParams, setSearchParams] = useSearchParams();
   const id = searchParams.get('details');
 
-  useEffect(() => {
-    if (!id) return;
-
-    setLoading(true);
-    fetch(`https://pokeapi.co/api/v2/pokemon/${id}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setData(data);
-        setLoading(false);
-      })
-      .catch(() => {
-        setData(null);
-        setLoading(false);
-      });
+  const fetchFn = useCallback(() => {
+    if (!id) return Promise.reject(new Error('No ID provided'));
+    return fetchPokemonDetails(id);
   }, [id]);
+
+  const { data, isLoading, error } = useFetchData<PokemonDetails>(fetchFn);
 
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
@@ -38,8 +28,8 @@ export default function DetailView() {
   }, [searchParams, setSearchParams]);
 
   if (!id) return null;
-  if (loading) return <Loader />;
-  if (!data)
+  if (isLoading) return <Loader />;
+  if (error || !data)
     return <div className="text-center text-red-500">Pokemon not found.</div>;
 
   return (

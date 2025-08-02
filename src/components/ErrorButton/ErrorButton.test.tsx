@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { ErrorButton } from './ErrorButton';
+import ErrorButton from './ErrorButton';
 import { ErrorBoundary } from '../ErrorBoundary/ErrorBoundary';
 
 describe('TestErrorButton', () => {

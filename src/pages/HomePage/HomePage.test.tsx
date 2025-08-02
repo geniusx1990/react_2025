@@ -12,44 +12,49 @@ const mockData = [
 describe('HomePage', () => {
   beforeEach(() => {
     localStorage.clear();
-    jest.restoreAllMocks();
-    global.fetch = jest.fn().mockResolvedValue({
-      ok: true,
-      json: async () => ({ results: mockData }),
-    });
-    jest.spyOn(api, 'fetchAllPokemon').mockResolvedValue(mockData);
-    console.error = jest.fn();
+    jest.clearAllMocks();
+    jest.spyOn(console, 'error').mockImplementation(() => {});
   });
 
   describe('Initial Mount Behavior', () => {
     test('displays previously saved search term from localStorage', async () => {
       localStorage.setItem('searchTerm', 'bulbasaur');
+      jest.spyOn(api, 'fetchAllPokemon').mockResolvedValue(mockData);
+
       render(
-        <MemoryRouter>
+        <MemoryRouter initialEntries={['/?search=bulbasaur']}>
           <HomePage />
         </MemoryRouter>
       );
+
       const input = await screen.findByPlaceholderText('Search Input Field');
       expect(input).toHaveValue('bulbasaur');
     });
 
     test('shows empty input if no localStorage value exists', async () => {
+      jest.spyOn(api, 'fetchPokemonPage').mockResolvedValue(mockData);
+
       render(
-        <MemoryRouter>
+        <MemoryRouter initialEntries={['/?page=1']}>
           <HomePage />
         </MemoryRouter>
       );
+
       const input = await screen.findByPlaceholderText('Search Input Field');
       expect(input).toHaveValue('');
     });
 
-    test('calls API once on mount', async () => {
-      const spy = jest.spyOn(api, 'fetchPokemonPage');
+    test('calls fetchPokemonPage on mount without search', async () => {
+      const spy = jest
+        .spyOn(api, 'fetchPokemonPage')
+        .mockResolvedValue(mockData);
+
       render(
-        <MemoryRouter>
+        <MemoryRouter initialEntries={['/?page=1']}>
           <HomePage />
         </MemoryRouter>
       );
+
       await waitFor(() => {
         expect(spy).toHaveBeenCalledTimes(1);
       });
@@ -57,9 +62,13 @@ describe('HomePage', () => {
   });
 
   describe('Search Functionality', () => {
+    beforeEach(() => {
+      jest.spyOn(api, 'fetchAllPokemon').mockResolvedValue(mockData);
+    });
+
     test('updates input value when typing', async () => {
       render(
-        <MemoryRouter>
+        <MemoryRouter initialEntries={['/?page=1']}>
           <HomePage />
         </MemoryRouter>
       );
@@ -70,29 +79,33 @@ describe('HomePage', () => {
 
     test('saves search term to localStorage on search', async () => {
       render(
-        <MemoryRouter>
+        <MemoryRouter initialEntries={['/?page=1']}>
           <HomePage />
         </MemoryRouter>
       );
+
       const input = await screen.findByPlaceholderText('Search Input Field');
       const button = screen.getByRole('button', { name: /search/i });
 
       fireEvent.change(input, { target: { value: 'bulba' } });
       fireEvent.click(button);
 
-      expect(localStorage.getItem('searchTerm')).toBe('bulba');
+      await waitFor(() => {
+        expect(localStorage.getItem('searchTerm')).toBe('bulba');
+      });
     });
 
     test('filters results based on search input', async () => {
       render(
-        <MemoryRouter>
+        <MemoryRouter initialEntries={['/?page=1']}>
           <HomePage />
         </MemoryRouter>
       );
+
       const input = await screen.findByPlaceholderText('Search Input Field');
       const button = screen.getByRole('button', { name: /search/i });
 
-      fireEvent.change(input, { target: { value: 'iv' } });
+      fireEvent.change(input, { target: { value: 'ivy' } });
       fireEvent.click(button);
 
       const result = await screen.findByText(/ivysaur/i);
@@ -104,11 +117,13 @@ describe('HomePage', () => {
 
     test('overwrites existing localStorage value on new search', async () => {
       localStorage.setItem('searchTerm', 'oldterm');
+
       render(
-        <MemoryRouter>
+        <MemoryRouter initialEntries={['/?page=1']}>
           <HomePage />
         </MemoryRouter>
       );
+
       const input = await screen.findByPlaceholderText('Search Input Field');
       const button = screen.getByRole('button', { name: /search/i });
 
@@ -124,14 +139,16 @@ describe('HomePage', () => {
   describe('API Error Handling', () => {
     test('displays error message on 500', async () => {
       localStorage.setItem('searchTerm', 'bulba');
-      jest.spyOn(api, 'fetchAllPokemon').mockRejectedValueOnce({
-        message: 'Internal Server Error',
-      });
+      jest
+        .spyOn(api, 'fetchAllPokemon')
+        .mockRejectedValueOnce(new Error('Internal Server Error'));
+
       render(
-        <MemoryRouter>
+        <MemoryRouter initialEntries={['/?search=bulba']}>
           <HomePage />
         </MemoryRouter>
       );
+
       const error = await screen.findByText(/internal server error/i);
       expect(error).toBeInTheDocument();
     });
@@ -141,11 +158,13 @@ describe('HomePage', () => {
       jest
         .spyOn(api, 'fetchAllPokemon')
         .mockRejectedValueOnce(new Error('Not Found'));
+
       render(
-        <MemoryRouter>
+        <MemoryRouter initialEntries={['/?search=bulba']}>
           <HomePage />
         </MemoryRouter>
       );
+
       const error = await screen.findByText(/not found/i);
       expect(error).toBeInTheDocument();
     });
