@@ -1,4 +1,4 @@
-import { useTheme } from '../../Context/ThemeContext';
+import { useTheme } from '../../Hooks/useTheme.ts';
 
 export default function ThemeSwitcher() {
   const { theme, toggleTheme } = useTheme();

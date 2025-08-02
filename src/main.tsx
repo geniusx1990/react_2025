@@ -5,7 +5,7 @@ import { ErrorBoundary } from './components/ErrorBoundary/ErrorBoundary.tsx';
 import { FallbackUi } from './components/FallbackUI/FallbackUi.tsx';
 import { RouterProvider } from 'react-router';
 import { router } from './routes/router.tsx';
-import { ThemeProvider } from './Context/ThemeContext.tsx';
+import { ThemeProvider } from './Context/ThemeProvider.tsx';
 
 const rootElement = document.getElementById('root');
 if (!rootElement) throw new Error('Root element not found');

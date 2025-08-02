@@ -3,11 +3,11 @@ import ThemeSwitcher from './ThemeSwitcher';
 
 const mockToggleTheme = jest.fn();
 
-jest.mock('../../Context/ThemeContext', () => ({
-  useTheme: jest.fn(() => ({
+jest.mock('../../Hooks/useTheme.ts', () => ({
+  useTheme: () => ({
     theme: 'light',
     toggleTheme: mockToggleTheme,
-  })),
+  }),
 }));
 
 describe('ThemeSwitcher', () => {

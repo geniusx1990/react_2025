@@ -7,6 +7,7 @@ import { Outlet, useSearchParams } from 'react-router';
 import { useLocalStorage } from '../../Hooks/useLocalStorage.ts';
 import Pagination from '../../components/Pagination/Pagination.tsx';
 import { useFetchData } from '../../Hooks/useFetchData.ts';
+import Flyout from '../../components/Flyout/Flyout.tsx';
 
 export default function HomePage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -86,6 +87,8 @@ export default function HomePage() {
           onPageChange={handleLoadPage}
         />
       )}
+
+      <Flyout />
     </div>
   );
 }
