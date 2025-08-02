@@ -168,5 +168,35 @@ describe('HomePage', () => {
       const error = await screen.findByText(/not found/i);
       expect(error).toBeInTheDocument();
     });
+
+    test('renders Pagination when no search and no error', async () => {
+      jest.spyOn(api, 'fetchPokemonPage').mockResolvedValue(mockData);
+
+      render(
+        <MemoryRouter initialEntries={['/?page=1']}>
+          <HomePage />
+        </MemoryRouter>
+      );
+
+      const pageButton = await screen.findByRole('button', { name: '1' }); // например, страница 1
+      expect(pageButton).toBeInTheDocument();
+    });
+
+    test('clicking pagination button updates the page param', async () => {
+      jest.spyOn(api, 'fetchPokemonPage').mockResolvedValue(mockData);
+
+      render(
+        <MemoryRouter initialEntries={['/?page=1']}>
+          <HomePage />
+        </MemoryRouter>
+      );
+
+      const pageButton = await screen.findByRole('button', { name: '2' });
+      fireEvent.click(pageButton);
+
+      await waitFor(() => {
+        expect(api.fetchPokemonPage).toHaveBeenCalledWith(8, 8);
+      });
+    });
   });
 });

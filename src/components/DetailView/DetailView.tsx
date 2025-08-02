@@ -30,12 +30,16 @@ export default function DetailView() {
   if (!id) return null;
   if (isLoading) return <Loader />;
   if (error || !data)
-    return <div className="text-center text-red-500">Pokemon not found.</div>;
+    return (
+      <div className="text-center text-red-500 dark:text-red-400">
+        Pokemon not found.
+      </div>
+    );
 
   return (
-    <div className="relative h-full p-4 md:p-6 overflow-y-auto">
+    <div className="relative h-full p-4 md:p-6 overflow-y-auto transition-colors">
       <button
-        className="absolute top-2 right-2 text-xl text-red-500 hover:text-red-700"
+        className="absolute top-2 right-2 text-xl text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors"
         onClick={() => {
           searchParams.delete('details');
           setSearchParams(searchParams);
@@ -44,7 +48,7 @@ export default function DetailView() {
         ✖
       </button>
 
-      <div className="bg-gray-100 rounded-xl shadow-md p-4 space-y-4 h-full">
+      <div className="bg-gray-100 dark:bg-gray-900 text-black dark:text-white rounded-xl shadow-md p-4 space-y-4 h-full transition-colors">
         <h2 className="text-2xl font-bold capitalize text-center">
           {data.name}
         </h2>
@@ -57,7 +61,7 @@ export default function DetailView() {
           />
         </div>
 
-        <div className="space-y-2 text-gray-700">
+        <div className="space-y-2 text-gray-700 dark:text-gray-300">
           <p>
             <strong>Height:</strong> {data.height}
           </p>

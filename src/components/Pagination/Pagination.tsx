@@ -17,15 +17,19 @@ export default function Pagination({
   const endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
 
   for (let i = startPage; i <= endPage; i++) {
+    const isActive = i === currentPage;
+
     pages.push(
       <button
         key={i}
         onClick={() => onPageChange(i)}
-        className={`px-3 py-1 rounded border ${
-          i === currentPage
-            ? 'bg-blue-600 text-white font-bold'
-            : 'bg-white text-blue-600 hover:bg-blue-100'
-        }`}
+        className={`px-3 py-1 rounded border transition-colors duration-200
+          ${
+            isActive
+              ? 'bg-blue-600 text-white font-bold border-blue-600'
+              : 'bg-white text-blue-600 border-gray-300 hover:bg-blue-100 dark:bg-gray-800 dark:text-blue-400 dark:border-gray-600 dark:hover:bg-gray-700'
+          }
+        `}
       >
         {i}
       </button>

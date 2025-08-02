@@ -11,8 +11,8 @@ export default function Navigation() {
               end
               className={({ isActive }) =>
                 isActive
-                  ? 'text-blue-600 border-b-2 border-blue-600 pb-1'
-                  : 'text-gray-700 hover:text-blue-600'
+                  ? 'text-blue-600 border-b-2 border-blue-600 pb-1 dark:text-blue-400 dark:border-blue-400'
+                  : 'text-gray-700 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400'
               }
             >
               Home
@@ -23,8 +23,8 @@ export default function Navigation() {
               to="/about"
               className={({ isActive }) =>
                 isActive
-                  ? 'text-blue-600 border-b-2 border-blue-600 pb-1'
-                  : 'text-gray-700 hover:text-blue-600'
+                  ? 'text-blue-600 border-b-2 border-blue-600 pb-1 dark:text-blue-400 dark:border-blue-400'
+                  : 'text-gray-700 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400'
               }
             >
               About

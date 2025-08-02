@@ -16,7 +16,7 @@ export default function Card({ poke }: { poke: IPokemon }) {
 
   return (
     <div
-      className="border rounded p-4 shadow bg-white text-center mt-4 cursor-pointer hover:bg-gray-100"
+      className="border rounded p-4 shadow bg-white text-black dark:bg-gray-800 dark:text-white dark:border-gray-700 text-center mt-4 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
       onClick={handleClick}
     >
       <h3 className="text-xl font-bold mb-2 capitalize">{name}</h3>

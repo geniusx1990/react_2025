@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import Header from './Header';
+import SearchComponent from './SearchComponent.tsx';
 
-describe('Header component', () => {
+describe('SearchComponent component', () => {
   const mockOnSearch = jest.fn();
 
   beforeEach(() => {
@@ -9,7 +9,7 @@ describe('Header component', () => {
   });
 
   test('renders search input and search button', () => {
-    render(<Header searchTerm="" onSearch={mockOnSearch} />);
+    render(<SearchComponent searchTerm="" onSearch={mockOnSearch} />);
     expect(
       screen.getByPlaceholderText('Search Input Field')
     ).toBeInTheDocument();
@@ -17,7 +17,7 @@ describe('Header component', () => {
   });
 
   test('displays previously saved search term in input field', () => {
-    render(<Header searchTerm="initial" onSearch={mockOnSearch} />);
+    render(<SearchComponent searchTerm="initial" onSearch={mockOnSearch} />);
     const input = screen.getByPlaceholderText(
       'Search Input Field'
     ) as HTMLInputElement;
@@ -25,7 +25,7 @@ describe('Header component', () => {
   });
 
   test('shows empty input when no saved searchTerm is provided', () => {
-    render(<Header searchTerm="" onSearch={mockOnSearch} />);
+    render(<SearchComponent searchTerm="" onSearch={mockOnSearch} />);
     const input = screen.getByPlaceholderText(
       'Search Input Field'
     ) as HTMLInputElement;
@@ -33,7 +33,7 @@ describe('Header component', () => {
   });
 
   test('updates input when user types', () => {
-    render(<Header searchTerm="" onSearch={mockOnSearch} />);
+    render(<SearchComponent searchTerm="" onSearch={mockOnSearch} />);
     const input = screen.getByPlaceholderText(
       'Search Input Field'
     ) as HTMLInputElement;
@@ -43,7 +43,7 @@ describe('Header component', () => {
   });
 
   test('trims input and calls onSearch when Search button is clicked', () => {
-    render(<Header searchTerm="" onSearch={mockOnSearch} />);
+    render(<SearchComponent searchTerm="" onSearch={mockOnSearch} />);
     const input = screen.getByPlaceholderText(
       'Search Input Field'
     ) as HTMLInputElement;
@@ -57,7 +57,7 @@ describe('Header component', () => {
   });
 
   test('calls onSearch when Enter key is pressed', () => {
-    render(<Header searchTerm="" onSearch={mockOnSearch} />);
+    render(<SearchComponent searchTerm="" onSearch={mockOnSearch} />);
     const input = screen.getByPlaceholderText(
       'Search Input Field'
     ) as HTMLInputElement;
@@ -70,7 +70,7 @@ describe('Header component', () => {
   });
 
   test('onSearch called with empty string when input is only spaces', () => {
-    render(<Header searchTerm="" onSearch={mockOnSearch} />);
+    render(<SearchComponent searchTerm="" onSearch={mockOnSearch} />);
     const input = screen.getByPlaceholderText(
       'Search Input Field'
     ) as HTMLInputElement;

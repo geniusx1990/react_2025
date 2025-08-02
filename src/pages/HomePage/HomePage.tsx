@@ -1,4 +1,4 @@
-import Header from '../../components/Header/Header.tsx';
+import SearchComponent from '../../components/SearchComponent/SearchComponent.tsx';
 import Main from '../../components/Main/Main.tsx';
 import { fetchAllPokemon, fetchPokemonPage } from '../../utils/api.ts';
 import type { IPokemon } from '../../utils/types.ts';
@@ -60,7 +60,7 @@ export default function HomePage() {
 
   return (
     <div className="max-w-6xl mx-auto p-6 space-y-6">
-      <Header searchTerm={search} onSearch={handleSearch} />
+      <SearchComponent searchTerm={search} onSearch={handleSearch} />
 
       <div className="relative">
         <Main data={pokemonList ?? []} isLoading={isLoading} error={error} />
@@ -69,7 +69,8 @@ export default function HomePage() {
           <div
             className={`
       absolute top-0 right-0 h-full w-full md:w-[380px] z-10
-      bg-white border-l shadow-lg transition-transform duration-300 ease-in-out
+      bg-white dark:bg-gray-900 border-l border-gray-200 dark:border-gray-700
+      shadow-lg transition-transform duration-300 ease-in-out
       translate-x-0
     `}
           >
