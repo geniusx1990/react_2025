@@ -1,7 +1,7 @@
 import { PokemonDetails } from './types.ts';
 import { SelectedItem } from '../store/useSelectionStore.ts';
 
-export async function generateCSVBlobURL(
+export async function downloadItemsAsCSV(
   items: SelectedItem[]
 ): Promise<string> {
   const results = await Promise.allSettled(

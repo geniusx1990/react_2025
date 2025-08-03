@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { useSelectionStore } from '../../store/useSelectionStore';
-import { generateCSVBlobURL } from '../../utils/downloadItemsAsCSV';
+import { downloadItemsAsCSV } from '../../utils/downloadItemsAsCSV';
 
 export default function Flyout() {
   const { getSelectedArray, getSelectedCount, unselectAll } =
@@ -13,7 +13,7 @@ export default function Flyout() {
   if (count === 0) return null;
 
   const handleDownload = async () => {
-    const url = await generateCSVBlobURL(items);
+    const url = await downloadItemsAsCSV(items);
 
     if (linkRef.current) {
       linkRef.current.href = url;
