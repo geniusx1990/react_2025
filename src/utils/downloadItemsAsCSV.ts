@@ -1,29 +1,33 @@
-import type { SelectedItem } from '../store/useSelectionStore';
+import { PokemonDetails } from './types.ts';
+import { SelectedItem } from '../store/useSelectionStore.ts';
 
-interface PokemonDetails {
-  height: number;
-  weight: number;
-  types: { type: { name: string } }[];
-}
-
-export async function downloadItemsAsCSV(items: SelectedItem[]) {
-  const enrichedItems = await Promise.all(
+export async function generateCSVBlobURL(
+  items: SelectedItem[]
+): Promise<string> {
+  const results = await Promise.allSettled(
     items.map(async (item) => {
-      try {
-        const res = await fetch(item.detailsUrl);
-        const data: PokemonDetails = await res.json();
-        return {
-          ...item,
-          height: data.height,
-          weight: data.weight,
-          types: data.types.map((t) => t.type.name),
-        };
-      } catch (err) {
-        console.error(`Error fetching details for ${item.name}`, err);
-        return item;
-      }
+      const res = await fetch(item.detailsUrl);
+      const data: PokemonDetails = await res.json();
+      return {
+        ...item,
+        height: data.height,
+        weight: data.weight,
+        types: data.types.map((t) => t.type.name),
+      };
     })
   );
+
+  const enrichedItems = results.map((result, index) => {
+    if (result.status === 'fulfilled') {
+      return result.value;
+    } else {
+      console.error(
+        `Error fetching details for ${items[index].name}`,
+        result.reason
+      );
+      return items[index];
+    }
+  });
 
   const csvRows = [
     ['ID', 'Name', 'Description', 'Details URL', 'Height', 'Weight', 'Types'],
@@ -47,12 +51,5 @@ export async function downloadItemsAsCSV(items: SelectedItem[]) {
     .join('\n');
 
   const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `${enrichedItems.length}_items.csv`;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
+  return URL.createObjectURL(blob);
 }

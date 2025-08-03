@@ -1,5 +1,6 @@
+import { useRef } from 'react';
 import { useSelectionStore } from '../../store/useSelectionStore';
-import { downloadItemsAsCSV } from '../../utils/downloadItemsAsCSV';
+import { generateCSVBlobURL } from '../../utils/downloadItemsAsCSV';
 
 export default function Flyout() {
   const { getSelectedArray, getSelectedCount, unselectAll } =
@@ -7,10 +8,20 @@ export default function Flyout() {
 
   const count = getSelectedCount();
   const items = getSelectedArray();
+  const linkRef = useRef<HTMLAnchorElement>(null);
 
   if (count === 0) return null;
 
-  const handleDownload = () => downloadItemsAsCSV(items);
+  const handleDownload = async () => {
+    const url = await generateCSVBlobURL(items);
+
+    if (linkRef.current) {
+      linkRef.current.href = url;
+      linkRef.current.download = `${items.length}_items.csv`;
+      linkRef.current.click();
+      URL.revokeObjectURL(url);
+    }
+  };
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-10 bg-white dark:bg-gray-900 border-t p-4 flex items-center justify-between shadow-md">
