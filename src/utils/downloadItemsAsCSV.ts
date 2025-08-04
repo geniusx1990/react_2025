@@ -1,5 +1,6 @@
 import { PokemonDetails } from './types.ts';
 import { SelectedItem } from '../store/useSelectionStore.ts';
+import { formatToCSV } from './formatToCSV';
 
 export async function downloadItemsAsCSV(
   items: SelectedItem[]
@@ -44,12 +45,8 @@ export async function downloadItemsAsCSV(
     ),
   ];
 
-  const csvContent = csvRows
-    .map((r) =>
-      r.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(',')
-    )
-    .join('\n');
-
+  const csvContent = formatToCSV(csvRows);
   const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+
   return URL.createObjectURL(blob);
 }

@@ -17,6 +17,8 @@ const mockedDownload = downloadItemsAsCSV as jest.Mock;
 describe('Flyout component', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    global.URL.createObjectURL = jest.fn(() => 'blob:mock-url');
+    global.URL.revokeObjectURL = jest.fn();
   });
 
   it('does not render when no items are selected', () => {

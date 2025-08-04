@@ -1,6 +1,6 @@
-import { useRef } from 'react';
 import { useSelectionStore } from '../../store/useSelectionStore';
 import { downloadItemsAsCSV } from '../../utils/downloadItemsAsCSV';
+import { triggerDownload } from '../../utils/triggerDownload';
 
 export default function Flyout() {
   const { getSelectedArray, getSelectedCount, unselectAll } =
@@ -8,19 +8,12 @@ export default function Flyout() {
 
   const count = getSelectedCount();
   const items = getSelectedArray();
-  const linkRef = useRef<HTMLAnchorElement>(null);
 
   if (count === 0) return null;
 
   const handleDownload = async () => {
     const url = await downloadItemsAsCSV(items);
-
-    if (linkRef.current) {
-      linkRef.current.href = url;
-      linkRef.current.download = `${items.length}_items.csv`;
-      linkRef.current.click();
-      URL.revokeObjectURL(url);
-    }
+    triggerDownload(url, `${items.length}_items.csv`);
   };
 
   return (
