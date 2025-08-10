@@ -3,11 +3,13 @@ import { IPokemon } from '../../utils/types.ts';
 import { useSearchParams } from 'react-router';
 import { ChangeEvent } from 'react';
 import { useSelectionStore } from '../../store/useSelectionStore.ts';
+import { usePrefetchPokemonDetails } from '../../query/hooks.ts';
 
 export default function Card({ poke }: { poke: IPokemon }) {
   const { name, url } = poke;
   const id = getPokemonId(url);
   const imgUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
+  const prefetchDetails = usePrefetchPokemonDetails();
 
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -21,12 +23,19 @@ export default function Card({ poke }: { poke: IPokemon }) {
 
   const handleCheckboxChange = (e: ChangeEvent<HTMLInputElement>) => {
     e.stopPropagation();
+    const checked = e.target.checked;
     toggleItem({
       id,
       name,
       description: `Pokemon ${name}`,
       detailsUrl: url,
     });
+
+    if (checked) {
+      prefetchDetails(id).catch((err) => {
+        console.error('Prefetch failed', err);
+      });
+    }
   };
 
   return (

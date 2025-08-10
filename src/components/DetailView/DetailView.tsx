@@ -1,57 +1,63 @@
-import { useCallback, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useSearchParams } from 'react-router';
+import { usePokemonDetailsQuery } from '../../query/hooks.ts';
 import Loader from '../Loader/Loader.tsx';
-import { PokemonDetails } from '../../utils/types.ts';
-import { useFetchData } from '../../Hooks/useFetchData.ts';
-import { fetchPokemonDetails } from '../../utils/api.ts';
 
 export default function DetailView() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const id = searchParams.get('details');
-
-  const fetchFn = useCallback(() => {
-    if (!id) return Promise.reject(new Error('No ID provided'));
-    return fetchPokemonDetails(id);
-  }, [id]);
-
-  const { data, isLoading, error } = useFetchData<PokemonDetails>(fetchFn);
+  const rawId = searchParams.get('details');
+  const id = rawId ?? '';
 
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        searchParams.delete('details');
-        setSearchParams(searchParams);
+        const next = new URLSearchParams(searchParams);
+        next.delete('details');
+        setSearchParams(next);
       }
     };
     window.addEventListener('keydown', handleEsc);
     return () => window.removeEventListener('keydown', handleEsc);
   }, [searchParams, setSearchParams]);
 
+  const { data, isPending, isFetching, error, refetch } =
+    usePokemonDetailsQuery(id);
+
   if (!id) return null;
-  if (isLoading) return <Loader />;
-  if (error || !data)
+
+  if (isPending) return <Loader />;
+
+  if (error || !data) {
     return (
-      <div className="text-center text-red-500 dark:text-red-400">
+      <div className="text-center text-red-500 dark:text-red-400 p-4">
         Pokemon not found.
+        <button className="ml-2 underline" onClick={() => refetch()}>
+          Retry
+        </button>
       </div>
     );
+  }
 
   return (
     <div className="relative h-full p-4 md:p-6 overflow-y-auto transition-colors">
       <button
         className="absolute top-2 right-2 text-xl text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors"
         onClick={() => {
-          searchParams.delete('details');
-          setSearchParams(searchParams);
+          const next = new URLSearchParams(searchParams);
+          next.delete('details');
+          setSearchParams(next);
         }}
       >
         ✖
       </button>
 
       <div className="bg-gray-100 dark:bg-gray-900 text-black dark:text-white rounded-xl shadow-md p-4 space-y-4 h-full transition-colors">
-        <h2 className="text-2xl font-bold capitalize text-center">
-          {data.name}
-        </h2>
+        <div className="flex items-center justify-between">
+          <h2 className="text-2xl font-bold capitalize">{data.name}</h2>
+          {isFetching ? (
+            <span className="text-sm opacity-70">Refreshing…</span>
+          ) : null}
+        </div>
 
         <div className="flex justify-center">
           <img

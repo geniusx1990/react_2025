@@ -6,16 +6,23 @@ import { FallbackUi } from './components/FallbackUI/FallbackUi.tsx';
 import { RouterProvider } from 'react-router';
 import { router } from './routes/router.tsx';
 import { ThemeProvider } from './Context/ThemeProvider.tsx';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 const rootElement = document.getElementById('root');
 if (!rootElement) throw new Error('Root element not found');
 
+const queryClient = new QueryClient();
+
 createRoot(rootElement).render(
   <StrictMode>
-    <ThemeProvider>
-      <ErrorBoundary fallback={<FallbackUi />}>
-        <RouterProvider router={router} />
-      </ErrorBoundary>
-    </ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider>
+        <ErrorBoundary fallback={<FallbackUi />}>
+          <RouterProvider router={router} />
+        </ErrorBoundary>
+      </ThemeProvider>
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
   </StrictMode>
 );

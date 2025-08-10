@@ -1,13 +1,14 @@
 import SearchComponent from '../../components/SearchComponent/SearchComponent.tsx';
 import Main from '../../components/Main/Main.tsx';
-import { fetchAllPokemon, fetchPokemonPage } from '../../utils/api.ts';
-import type { IPokemon } from '../../utils/types.ts';
-import { useCallback } from 'react';
 import { Outlet, useSearchParams } from 'react-router';
 import { useLocalStorage } from '../../Hooks/useLocalStorage.ts';
 import Pagination from '../../components/Pagination/Pagination.tsx';
-import { useFetchData } from '../../Hooks/useFetchData.ts';
 import Flyout from '../../components/Flyout/Flyout.tsx';
+import {
+  usePokemonPageQuery,
+  usePokemonSearchQuery,
+} from '../../query/hooks.ts';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function HomePage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -21,21 +22,17 @@ export default function HomePage() {
 
   const totalPages = search ? 1 : Math.ceil(1302 / limit);
 
-  const fetcher = useCallback(() => {
-    return search
-      ? fetchAllPokemon().then((data) =>
-          data.filter((p) =>
-            p.name.toLowerCase().includes(search.toLowerCase())
-          )
-        )
-      : fetchPokemonPage(limit, offset);
-  }, [search, limit, offset]);
+  const pageQuery = usePokemonPageQuery(limit, offset);
+  const searchQuery = usePokemonSearchQuery(search);
 
-  const {
-    data: pokemonList,
-    isLoading,
-    error,
-  } = useFetchData<IPokemon[]>(fetcher);
+  const isSearching = !!search;
+  const data = isSearching ? (searchQuery.data ?? []) : (pageQuery.data ?? []);
+  const isLoading = isSearching
+    ? searchQuery.isPending || searchQuery.isFetching
+    : pageQuery.isPending || pageQuery.isFetching;
+  const error = (
+    isSearching ? searchQuery.error : pageQuery.error
+  ) as Error | null;
 
   const handleSearch = (term: string) => {
     setStoredSearch(term);
@@ -59,12 +56,25 @@ export default function HomePage() {
     });
   };
 
+  const qc = useQueryClient();
+  const handleRefresh = () => {
+    qc.invalidateQueries({ queryKey: ['pokemon'], refetchType: 'all' });
+  };
+
   return (
     <div className="max-w-6xl mx-auto p-6 space-y-6">
       <SearchComponent searchTerm={search} onSearch={handleSearch} />
 
       <div className="relative">
-        <Main data={pokemonList ?? []} isLoading={isLoading} error={error} />
+        <Main
+          data={data}
+          isLoading={isLoading}
+          error={error ? error.message : null}
+          onRefresh={handleRefresh}
+          isRefreshing={
+            isSearching ? searchQuery.isFetching : pageQuery.isFetching
+          }
+        />
 
         {searchParams.get('details') && (
           <div
