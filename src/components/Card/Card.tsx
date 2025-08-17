@@ -1,58 +1,62 @@
-import { getPokemonId } from '../../utils/getPokemonId.ts';
-import { IPokemon } from '../../utils/types.ts';
-import { useSearchParams } from 'react-router';
-import { ChangeEvent } from 'react';
-import { useSelectionStore } from '../../store/useSelectionStore.ts';
-import { usePrefetchPokemonDetails } from '../../query/hooks.ts';
+'use client';
+import Image from 'next/image';
+import { useRouter, usePathname } from '@/i18n/navigation';
+import { useSelectionStore } from '@/store/useSelectionStore';
+import { usePrefetchPokemonDetails } from '@/query/hooks';
+import { getPokemonId } from '@/utils/getPokemonId';
 
-export default function Card({ poke }: { poke: IPokemon }) {
+export default function Card({
+  poke,
+}: {
+  poke: { name: string; url: string };
+}) {
   const { name, url } = poke;
   const id = getPokemonId(url);
   const imgUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
-  const prefetchDetails = usePrefetchPokemonDetails();
 
-  const [searchParams, setSearchParams] = useSearchParams();
-
+  const router = useRouter();
+  const pathname = usePathname();
   const { selected, toggleItem } = useSelectionStore();
   const isSelected = !!selected[id];
+  const prefetchDetails = usePrefetchPokemonDetails();
 
-  const handleClick = () => {
-    searchParams.set('details', id);
-    setSearchParams(searchParams);
-  };
-
-  const handleCheckboxChange = (e: ChangeEvent<HTMLInputElement>) => {
-    e.stopPropagation();
-    const checked = e.target.checked;
-    toggleItem({
-      id,
-      name,
-      description: `Pokemon ${name}`,
-      detailsUrl: url,
-    });
-
-    if (checked) {
-      prefetchDetails(id).catch((err) => {
-        console.error('Prefetch failed', err);
-      });
-    }
+  const openDetails = () => {
+    const params = new URLSearchParams(window.location.search);
+    params.set('details', id);
+    router.replace(`${pathname}?${params.toString()}`);
   };
 
   return (
     <div
-      className="relative border rounded p-4 shadow bg-white text-black dark:bg-gray-800 dark:text-white dark:border-gray-700 text-center mt-4 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-      onClick={handleClick}
+      className="relative border rounded p-4 shadow bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer text-center"
+      onClick={openDetails}
     >
       <input
         type="checkbox"
         checked={isSelected}
-        onChange={handleCheckboxChange}
+        onChange={(e) => {
+          e.stopPropagation();
+          toggleItem({
+            id,
+            name,
+            description: `Pokemon ${name}`,
+            detailsUrl: url,
+          });
+          if (e.target.checked) prefetchDetails(id).catch(() => {});
+        }}
         onClick={(e) => e.stopPropagation()}
         aria-label={`Select ${name}`}
-        className="absolute top-2 left-2 w-4 h-4 cursor-pointer"
+        className="absolute top-2 left-2 w-4 h-4"
       />
       <h3 className="text-xl font-bold mb-2 capitalize">{name}</h3>
-      <img src={imgUrl} alt={name} className="mx-auto w-20 h-20" />
+      <Image
+        src={imgUrl}
+        alt={name}
+        width={80}
+        height={80}
+        className="mx-auto w-20 h-20"
+        priority={false}
+      />
     </div>
   );
 }

@@ -8,8 +8,8 @@ import {
   fetchAllPokemon,
   fetchPokemonPage,
   fetchPokemonDetails,
-} from '../utils/api';
-import type { IPokemon, PokemonDetails } from '../utils/types';
+} from '@/utils/api';
+import type { IPokemon, PokemonDetails } from '@/utils/types';
 
 export function usePokemonPageQuery(limit: number, offset: number) {
   return useQuery<IPokemon[]>({

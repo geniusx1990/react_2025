@@ -1,4 +1,4 @@
-import { URL_API } from './const.ts';
+import { URL_API } from './const';
 import type { IPokemon, PokemonDetails } from './types.ts';
 
 export const fetchAllPokemon = async (): Promise<IPokemon[]> => {

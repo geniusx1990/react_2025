@@ -1,8 +1,11 @@
-import type { IPokemon } from '../../utils/types.ts';
-import CardList from '../CardList/CardList.tsx';
-import Skeleton from '../Skeleton/Skeleton.tsx';
-import Loader from '../Loader/Loader.tsx';
-import ErrorButton from '../ErrorButton/ErrorButton.tsx';
+'use client';
+
+import type { IPokemon } from '@/utils/types';
+import CardList from '../CardList/CardList';
+import Skeleton from '../Skeleton/Skeleton';
+import Loader from '../Loader/Loader';
+import ErrorButton from '../ErrorButton/ErrorButton';
+import { useTranslations } from 'next-intl';
 
 interface Props {
   data: IPokemon[];
@@ -20,6 +23,7 @@ export default function Main({
   onRefresh,
 }: Props) {
   let content;
+  const t = useTranslations('results');
 
   if (error) {
     content = (
@@ -37,7 +41,7 @@ export default function Main({
   } else if (data.length === 0) {
     content = (
       <div className="text-center text-gray-600 dark:text-gray-300 py-8 transition-colors">
-        No results found.
+        {t('notfound')}
       </div>
     );
   } else {
@@ -49,7 +53,7 @@ export default function Main({
       <section className="bg-white dark:bg-gray-900 p-4 rounded shadow transition-colors duration-300">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold text-gray-800 dark:text-white">
-            Results
+            {t('title')}
           </h2>
           <div className="flex items-center gap-2">
             {isRefreshing ? (
@@ -61,7 +65,7 @@ export default function Main({
               className="bg-blue-600 text-white px-3 py-2 rounded hover:bg-blue-700 transition-colors"
               title="Refresh (invalidate cache)"
             >
-              Refresh
+              {t('refresh')}
             </button>
           </div>
         </div>

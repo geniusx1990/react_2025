@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { logErrorToMyService } from '../../utils/logErrorToMyService.ts';
+import { logErrorToMyService } from '@/utils/logErrorToMyService';
 
 interface Props {
   fallback: React.ReactNode;

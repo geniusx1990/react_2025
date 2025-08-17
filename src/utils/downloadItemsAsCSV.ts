@@ -1,5 +1,5 @@
-import { PokemonDetails } from './types.ts';
-import { SelectedItem } from '../store/useSelectionStore.ts';
+import { PokemonDetails } from './types';
+import { SelectedItem } from '@/store/useSelectionStore';
 import { formatToCSV } from './formatToCSV';
 
 export async function downloadItemsAsCSV(

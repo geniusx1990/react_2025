@@ -1,6 +1,6 @@
-import Card from '../Card/Card.tsx';
-import type { IPokemon } from '../../utils/types.ts';
-import { getPokemonId } from '../../utils/getPokemonId.ts';
+import Card from '@/components/Card/Card';
+import type { IPokemon } from '@/utils/types';
+import { getPokemonId } from '@/utils/getPokemonId';
 
 export default function CardList({ data }: { data: IPokemon[] }) {
   return (

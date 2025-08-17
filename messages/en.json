@@ -1,0 +1,39 @@
+{
+  "LocaleSwitcher": {
+    "label": "Language",
+    "locale": "{locale, select, en {English} ru {Russian} other {Change language}}"
+  },
+  "nav": { "home": "Home", "about": "About" },
+  "search": {
+    "title": "Top controls",
+    "placeholder": "Search Input Field",
+    "button": "Search"
+  },
+  "results": {
+    "title": "Results",
+    "notfound": "No results found.",
+    "refresh": "Refresh"
+  },
+  "flyout": {
+    "selected": "{count} item(s) selected",
+    "unselect": "Unselect all",
+    "download": "Download"
+  },
+  "errorbutton": { "errorbutton": "Throw Error" },
+  "NotFound": {
+    "code": "404",
+    "title": "Page Not Found",
+    "description": "Oops! The page you are looking for does not exist.",
+    "cta": "Go Home"
+  },
+  "About": {
+    "metaTitle": "About",
+    "metaDescription": "About this project and author",
+    "heading": "About",
+    "intro": "This project was developed as part of the RS School React Course. It demonstrates working with React Router, API integration, search, pagination, and local storage.",
+    "authorHeading": "👤 Author",
+    "authorText": "Hi! I’m a frontend developer passionate about learning and building interactive applications with modern technologies. I enjoy working with React, TypeScript, and improving UI/UX.",
+    "cta": "RS School React Course Link",
+    "linkUrl": "https://rs.school/courses/reactjs"
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "LocaleSwitcher": {
+    "label": "Язык",
+    "locale": "{locale, select, en {Английский} ru {Русский} other {Сменить язык}}"
+  },
+  "nav": { "home": "Главная", "about": "О проекте" },
+  "search": {
+    "title": "Основные элементы управления",
+    "placeholder": "Поле поиска",
+    "button": "Искать"
+  },
+  "results": {
+    "title": "Результаты",
+    "notfound": "Нет результатов.",
+    "refresh": "Обновить"
+  },
+  "errorbutton": { "errorbutton": "Вызвать ошибку" },
+  "flyout": {
+    "selected": "Выбрано: {count}",
+    "unselect": "Снять все",
+    "download": "Скачать"
+  },
+  "NotFound": {
+    "code": "404",
+    "title": "Страница не найдена",
+    "description": "Упс! Запрошенная страница не существует.",
+    "cta": "На главную"
+  },
+  "About": {
+    "metaTitle": "О проекте",
+    "metaDescription": "О проекте и авторе",
+    "heading": "О проекте",
+    "intro": "Этот проект был разработан в рамках курса RS School React. Он демонстрирует работу с React Router, интеграцию с API, поиск, пагинацию и локальное хранилище.",
+    "authorHeading": "👤 Автор",
+    "authorText": "Привет! Я фронтенд-разработчик, увлечённый обучением и созданием интерактивных приложений на современных технологиях. Люблю работать с React, TypeScript и улучшать UI/UX.",
+    "cta": "Ссылка на курс RS School React",
+    "linkUrl": "https://rs.school/courses/reactjs"
+  }
+}
