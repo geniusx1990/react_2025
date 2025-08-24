@@ -26,7 +26,10 @@ export default function Navigation() {
           </Link>
         </li>
         <li>
-          <Link href={'/about' as Route} className={linkClass('/about' as Route)}>
+          <Link
+            href={'/about' as Route}
+            className={linkClass('/about' as Route)}
+          >
             {t('about')}
           </Link>
         </li>

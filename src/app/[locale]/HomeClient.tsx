@@ -7,6 +7,7 @@ import Flyout from '@/components/Flyout/Flyout';
 import DetailView from '@/components/DetailView/DetailView';
 import { useRouter, usePathname, Link } from '@/i18n/navigation';
 import { usePokemonPageQuery, usePokemonSearchQuery } from '@/query/hooks';
+import EntriesGrid from '@/components/EntriesGrid/EntriesGrid';
 
 type IPokemon = { name: string; url: string };
 
@@ -66,6 +67,7 @@ export default function HomeClient({
       />
 
       <div className="relative">
+        <EntriesGrid />
         <Main
           data={data}
           isLoading={isLoading}

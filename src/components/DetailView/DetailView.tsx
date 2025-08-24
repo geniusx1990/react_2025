@@ -20,9 +20,9 @@ export default function DetailView() {
   const close = useCallback(() => {
     const next = new URLSearchParams(searchParams.toString());
     next.delete('details');
-    const href = (next.toString()
-        ? `${pathname}?${next.toString()}`
-        : pathname) as Route;
+    const href = (
+      next.toString() ? `${pathname}?${next.toString()}` : pathname
+    ) as Route;
 
     router.replace(href, { scroll: false });
   }, [router, pathname, searchParams]);
