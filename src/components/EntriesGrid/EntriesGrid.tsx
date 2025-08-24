@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import { useFormsStore } from '@/store/formsStore';
+import Image from 'next/image';
 
 const HIGHLIGHT_MS = 3500;
 
@@ -30,7 +31,7 @@ export default function EntriesGrid() {
         >
           <div className="flex items-start gap-3">
             {e.imageBase64 ? (
-              <img
+              <Image
                 src={e.imageBase64}
                 alt={`${e.name}'s picture`}
                 className="h-16 w-16 rounded object-cover border"

@@ -29,11 +29,6 @@ const jestConfig: JestConfigWithTsJest = {
     '!src/i18n/**',
     '!src/lib/pokemon.ts',
     '!src/query/**',
-
-
-
-
-
   ],
   coverageDirectory: 'coverage',
   coverageProvider: 'v8',

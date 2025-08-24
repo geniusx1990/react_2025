@@ -7,7 +7,7 @@ import Flyout from '@/components/pokemons/Flyout/Flyout';
 import DetailView from '@/components/pokemons/DetailView/DetailView';
 import { useRouter, usePathname, Link } from '@/i18n/navigation';
 import { usePokemonPageQuery, usePokemonSearchQuery } from '@/query/hooks';
-import EntriesGrid from '@/components/pokemons/EntriesGrid/EntriesGrid';
+import EntriesGrid from '@/components/EntriesGrid/EntriesGrid';
 
 type IPokemon = { name: string; url: string };
 

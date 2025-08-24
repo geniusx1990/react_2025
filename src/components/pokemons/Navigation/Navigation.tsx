@@ -21,7 +21,10 @@ export default function Navigation() {
     <nav>
       <ul className="flex space-x-6 text-lg font-medium">
         <li>
-          <Link href={'/public' as Route} className={linkClass('/' as Route, true)}>
+          <Link
+            href={'/public' as Route}
+            className={linkClass('/' as Route, true)}
+          >
             {t('home')}
           </Link>
         </li>
