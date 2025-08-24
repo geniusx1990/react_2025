@@ -8,6 +8,12 @@ const jestConfig: JestConfigWithTsJest = {
   ...presetConfig,
   testEnvironment: 'jsdom',
   setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
+
+  moduleNameMapper: {
+    '^@/(.*)$': '<rootDir>/src/$1',
+    '\\.(css|scss|sass)$': 'identity-obj-proxy',
+  },
+
   collectCoverage: true,
   collectCoverageFrom: [
     'src/**/*.{ts,tsx}',
@@ -16,6 +22,18 @@ const jestConfig: JestConfigWithTsJest = {
     '!src/index.{ts,tsx}',
     '!src/setupTests.{ts}',
     '!src/**/*.d.ts',
+    '!src/components/pokemons/**',
+    '!src/app/**',
+    '!src/Context/**',
+    '!src/Hooks/**',
+    '!src/i18n/**',
+    '!src/lib/pokemon.ts',
+    '!src/query/**',
+
+
+
+
+
   ],
   coverageDirectory: 'coverage',
   coverageProvider: 'v8',

@@ -2,7 +2,7 @@
 
 import type { IPokemon } from '@/utils/types';
 import CardList from '../CardList/CardList';
-import Skeleton from '../Skeleton/Skeleton';
+import Skeleton from '@/components/pokemons/Skeleton/Skeleton';
 import Loader from '../Loader/Loader';
 import ErrorButton from '../ErrorButton/ErrorButton';
 import { useTranslations } from 'next-intl';

@@ -3,7 +3,7 @@
 import { useEffect, useCallback } from 'react';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import Image from 'next/image';
-import Loader from '@/components/Loader/Loader';
+import Loader from '@/components/pokemons/Loader/Loader';
 import { usePokemonDetailsQuery } from '@/query/hooks';
 import type { Route } from 'next';
 

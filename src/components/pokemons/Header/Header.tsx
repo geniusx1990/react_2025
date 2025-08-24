@@ -1,9 +1,9 @@
 'use client';
 import { useState } from 'react';
-import Navigation from '@/components/Navigation/Navigation';
-import ThemeSwitcher from '@/components/ThemeSwitcher/ThemeSwitcher';
-import LocaleSwitcher from '@/components/LocaleSwitcher/LocaleSwitcher';
-import SharedModal from '@/components/Modal/SharedModal';
+import Navigation from '@/components/pokemons/Navigation/Navigation';
+import ThemeSwitcher from '@/components/pokemons/ThemeSwitcher/ThemeSwitcher';
+import LocaleSwitcher from '@/components/pokemons/LocaleSwitcher/LocaleSwitcher';
+import SharedModal from '@/components/pokemons/Modal/SharedModal';
 import UncontrolledForm from '@/components/Forms/UncontrolledForm';
 import HookForm from '@/components/Forms/HookForm';
 

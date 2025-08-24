@@ -2,7 +2,7 @@ import { NextIntlClientProvider, hasLocale } from 'next-intl';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
 import Providers from '@/providers/Providers';
-import Header from '@/components/Header/Header';
+import Header from '@/components/pokemons/Header/Header';
 import '../globals.css';
 
 export default async function RootLayout({

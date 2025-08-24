@@ -1,4 +1,4 @@
-import Card from '@/components/Card/Card';
+import Card from '@/components/pokemons/Card/Card';
 import type { IPokemon } from '@/utils/types';
 import { getPokemonId } from '@/utils/getPokemonId';
 

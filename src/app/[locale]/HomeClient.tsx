@@ -1,13 +1,13 @@
 'use client';
 
-import SearchComponent from '@/components/SearchComponent/SearchComponent';
-import Main from '@/components/Main/Main';
-import Pagination from '@/components/Pagination/Pagination';
-import Flyout from '@/components/Flyout/Flyout';
-import DetailView from '@/components/DetailView/DetailView';
+import SearchComponent from '@/components/pokemons/SearchComponent/SearchComponent';
+import Main from '@/components/pokemons/Main/Main';
+import Pagination from '@/components/pokemons/Pagination/Pagination';
+import Flyout from '@/components/pokemons/Flyout/Flyout';
+import DetailView from '@/components/pokemons/DetailView/DetailView';
 import { useRouter, usePathname, Link } from '@/i18n/navigation';
 import { usePokemonPageQuery, usePokemonSearchQuery } from '@/query/hooks';
-import EntriesGrid from '@/components/EntriesGrid/EntriesGrid';
+import EntriesGrid from '@/components/pokemons/EntriesGrid/EntriesGrid';
 
 type IPokemon = { name: string; url: string };
 
